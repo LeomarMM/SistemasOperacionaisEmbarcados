@@ -6,28 +6,26 @@ extern fila_aptos_t f_aptos;
 
 void configTimer0()
 {    
-   T0CONbits.PSA        = 0;
-   T0CONbits.T0PS       = 0b010;
-   T0CONbits.T0CS       = 0;
-   INTCONbits.TMR0IE    = 1;
-   INTCONbits.PEIE      = 1;
-   TMR0L                = 0;
+    T0CONbits.PSA        = 0;
+    T0CONbits.T0PS       = 0b010;
+    T0CONbits.T0CS       = 0;
+    INTCONbits.TMR0IE    = 1;
+    INTCONbits.PEIE      = 1;
+    TMR0L                = 0;
 }
 
 void __interrupt() ISR_TIMER()
 {
-   if (INTCONbits.TMR0IF) {
-      release_task_delay();
-      INTCONbits.TMR0IF = 0;
-      quantum_rr -= 1;
-      if (quantum_rr == 0) {
-         DISPATCHER(READY);
-      }
-      TMR0L = 0;   
-
-   }
+    if (INTCONbits.TMR0IF) 
+    {
+        release_task_delay();
+        INTCONbits.TMR0IF = 0;
+        quantum_rr -= 1;
+        if (quantum_rr == 0)
+            DISPATCHER(READY);
+        TMR0L = 0;   
+    }
 }
-
 void release_task_delay()
 {
    // Verifica se existem tarefas em espera (delay_task)
@@ -42,4 +40,4 @@ void release_task_delay()
          }
       }
    }
-}
+} 

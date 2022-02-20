@@ -6,7 +6,7 @@
 
 #define MAX_TASKS           4
 #define DEFAULT_SCH         ROUND_ROBIN_SCH
-#define QUANTUM_RR          100
+#define QUANTUM_RR          5
 #define DYNAMIC_MEMORY      DISABLE
 #define IDLE_TASK           DISABLE
 

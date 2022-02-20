@@ -1,19 +1,16 @@
 #include "kernel.h"
 #include "user_tasks.h"
-
 int main()
 {
-   config_os();
+    config_os();
+
+    create_task(2, pisca_led_1);
+    create_task(2, pisca_led_2);
+    create_task(2, adc_temp);
    
-   // Criação das tarefas de usuário
-   create_task(2, pisca_led_1);
-   create_task(2, pisca_led_2);
-   create_task(2, adc_temp);
+    start_os();
    
-   // Coloca o SO em execução
-   start_os();
+    while (1);
    
-   while (1);
-   
-   return 0;
+    return 0;
 }
