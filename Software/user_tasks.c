@@ -1,4 +1,6 @@
 #include "user_tasks.h"
+#include "semaphore.h"
+#include "io.h"
 #include "kernel.h"
 #include <xc.h>
 
@@ -7,7 +9,7 @@ void config_tasks()
   TRISDbits.RD0 = 0;
   TRISDbits.RD1 = 0;
   TRISDbits.RD2 = 0;
-  asm("GLOBAL _pisca_led_1, _pisca_led_2, _pisca_led_3");  
+  asm("GLOBAL _pisca_led_1, _pisca_led_2, _adc_temp");  
 }
 
 void pisca_led_1()
@@ -25,10 +27,16 @@ void pisca_led_2()
     LATDbits.LATD1 = ~PORTDbits.RD1;   
 }
 
-void pisca_led_3()
+void adc_temp()
 {
-  while (1) {
-    LATDbits.LATD2 = ~PORTDbits.RD2;   
-    chante_state_to_waiting();    
-  }
+    semaphore_t sem;
+    sem_create(&sem, 0);
+    while (1) 
+    {
+        sem_wait(&sem);
+        
+        adc_read(0);
+        
+        sem_post(&sem);
+    }
 }

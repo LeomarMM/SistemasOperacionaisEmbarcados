@@ -8,7 +8,7 @@ int main()
    // Criação das tarefas de usuário
    create_task(2, pisca_led_1);
    create_task(2, pisca_led_2);
-   create_task(2, pisca_led_3);
+   create_task(2, adc_temp);
    
    // Coloca o SO em execução
    start_os();

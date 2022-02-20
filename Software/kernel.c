@@ -2,6 +2,7 @@
 #include "user_tasks.h"
 #include "scheduler.h"
 #include "memory.h"
+#include "io.h"
 
 fila_aptos_t f_aptos;
 u_int quantum_rr;
@@ -47,6 +48,7 @@ void start_os()
   
   ei();
   T0CONbits.TMR0ON     = 1;  
+  adc_init();
 }
 
 void delay_task(u_int tempo)
