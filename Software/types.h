@@ -16,7 +16,7 @@ typedef enum {READY, RUNNING, WAITING} state_t;
 typedef struct context
 {
     #if IDLE_TASK == ENABLE
-    __uint24 stack_data[STACK_SIZE+1];
+    __uint24 stack_data[STACK_SIZE];
     #else
     __uint24 stack_data[STACK_SIZE];
     #endif

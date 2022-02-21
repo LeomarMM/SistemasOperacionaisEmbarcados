@@ -33,8 +33,10 @@ void adc_init()
 
 int adc_read(unsigned char port)
 {
+    di();
     ADCON0bits.CHS = port;
     ADCON0bits.GODONE = 1;
+    ei();
     while(ADCON0bits.GODONE);
     
     int temperature = ADRESH;
@@ -167,52 +169,70 @@ void lcd_shift_left(void)
 
 void heating_system(short state)
 {
+    di();
     PORTBbits.RB3 = (state == 1)? 0:1;
+    ei();
 }
 
 void cooling_system(short state)
 {
+    di();
     PORTBbits.RB5 = (state == 1)? 0:1;
+    ei();
 }
 
 void stable_temperature(short state)
 {
+    di();
     PORTBbits.RB4 = (state == 1)? 0:1;
+    ei();
 }
 
 void elevator_down(void)
 {
+    di();
     PORTEbits.RE0 = 0;
     PORTEbits.RE1 = 1;
+    ei();
 }
 
 void elevator_up(void)
 {
+    di();
     PORTEbits.RE1 = 0;
     PORTEbits.RE0 = 1;
+    ei();
 }
 
 void elevator_stop(void)
 {
+    di();
     PORTEbits.RE0 = 0;
     PORTEbits.RE1 = 0;
+    ei();
 }
 
 void fire_alarm_buzzer(short state)
 {
+    di();
     PORTDbits.RD0 = (state == 1)? 1:0;
+    ei();
 }
 
 void fire_alarm_warning_lights(short state)
 {
+    di();
     PORTBbits.RB6 = (state == 1)? 1:0;
     PORTBbits.RB7 = 0;
+    ei();
 }
 
 void fire_alarm_warning_lights_invert(void)
 {
+    di();
     PORTBbits.RB6 = ~PORTBbits.RB6;
     PORTBbits.RB7 = ~PORTBbits.RB7;
+    ei();
 }
 
 int read_fire_alarm_button(void)
@@ -232,9 +252,11 @@ int read_temperature_decrement_button(void)
 
 void enable_keypad_column(short column)
 {
+    di();
     PORTDbits.RD1 = (column == 1)? 0:1;
     PORTDbits.RD2 = (column == 2)? 0:1;
     PORTDbits.RD3 = (column == 3)? 0:1;
+    ei();
 }
 
 int read_keypad_row(void)
@@ -259,8 +281,10 @@ void usart_init()
 
 void usart_send_data(char data)
 {
+    di();
     TXREG = data;
     while(TXSTAbits.TRMT == 0);
+    ei();
 }
 
 char usart_read_data(void)
