@@ -12,8 +12,8 @@ const byte btab[4][3] =
     {7, 8, 9},
     {10, 0, 11}
 };
-int current_floor = 0;
-int next_floor = 0;
+int current_floor = 1;
+int next_floor = 1;
 short moving = 0;
 
 int temperature = 21;
@@ -124,10 +124,15 @@ void temperature_control(void)
 
 void elevator_control(void)
 {
-    int column = 1, row = -1, button = -1;
+    char buffer[21];
+    int column = 1, row = -1;
+    di();
+    lcd_set_cursor(3, 1);
+    sprintf(buffer, "Piso. Selec: %d", next_floor);
+    lcd_write_string(buffer);
+    ei();
     while(1)
     {
-        int buf[3];
         enable_keypad_column(column);
         di();
         __delay_ms(10);
@@ -135,8 +140,13 @@ void elevator_control(void)
         row = read_keypad_row();
         di();
         if(row)
-            if(btab[row-1][column-1] > 0 && btab[row-1][column-1] <= 9 && current_floor == next_floor) 
+            if(btab[row-1][column-1] > 0 && btab[row-1][column-1] <= 9 && current_floor == next_floor)
+            {
                 next_floor = btab[row-1][column-1];
+                lcd_set_cursor(3, 1);
+                sprintf(buffer, "Piso. Selec: %d", next_floor);
+                lcd_write_string(buffer);
+            }   
         ei();
         column++;
         if(column > 3) column = 1;
@@ -144,7 +154,12 @@ void elevator_control(void)
 }
 void elevator_move(void)
 {
-    
+    char buffer[21];
+    di();
+    lcd_set_cursor(4, 1);
+    sprintf(buffer, "Piso. Atual: %d", current_floor);
+    lcd_write_string(buffer);
+    ei();
     while(1)
     {
         if(next_floor != current_floor)
@@ -161,6 +176,9 @@ void elevator_move(void)
             di();
             if(next_floor < current_floor) current_floor--;
             if(next_floor > current_floor) current_floor++;
+            lcd_set_cursor(4, 1);
+            sprintf(buffer, "Piso. Atual: %d", current_floor);
+            lcd_write_string(buffer);
             ei();
         }
         else 
