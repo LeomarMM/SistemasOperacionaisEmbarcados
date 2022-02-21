@@ -1,7 +1,11 @@
+#include "io.h"
 #include "kernel.h"
 #include "user_tasks.h"
+
 int main()
 {
+    hardware_init();
+    
     config_os();
 
     create_task(2, pisca_led_1);

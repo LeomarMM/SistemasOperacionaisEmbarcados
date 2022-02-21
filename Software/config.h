@@ -10,7 +10,7 @@
 #define DYNAMIC_MEMORY      DISABLE
 #define IDLE_TASK           DISABLE
 
-#pragma config OSC = XT      // Oscillator Selection bits
+#pragma config OSC = HS      // Oscillator Selection bits
 #pragma config FCMEN = OFF      // Fail-Safe Clock Monitor Enable bit (Fail-Safe Clock Monitor disabled)
 #pragma config IESO = OFF       // Internal/External Oscillator Switchover bit (Oscillator Switchover mode disabled)
 
