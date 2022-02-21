@@ -9,9 +9,9 @@ void hardware_init(void)
     PORTE = 0x00;
     
     TRISA = 0b00000011; // RA0 e RA1 setados como entrada
-    TRISB = 0b00000111; // RB0, RB1 e RB2 setados como entradas, demais pinos do portB como saída
+    TRISB = 0b00000111; // RB0, RB1 e RB2 setados como entradas, demais pinos do portB como saï¿½da
     TRISC = 0b10000000;
-    TRISD = 0b11110000;       // seta portD como saída.
+    TRISD = 0b11110000;       // seta portD como saï¿½da.
     TRISE = 0b00000000;
     
     INTCON2bits.RBPU = 0; // Habilitando pull-up interno do PORTB
@@ -222,8 +222,8 @@ void fire_alarm_buzzer(short state)
 void fire_alarm_warning_lights(short state)
 {
     di();
-    PORTBbits.RB6 = (state == 1)? 1:0;
-    PORTBbits.RB7 = 0;
+    PORTBbits.RB6 = (state == 1)? 0:1;
+    PORTBbits.RB7 = 1;
     ei();
 }
 
@@ -289,7 +289,6 @@ void usart_send_data(char data)
 
 char usart_read_data(void)
 {
-    //TXREG = data;
-    //while(TXSTAbits.TRMT == 0);
+    
     return 'a';
 }

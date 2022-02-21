@@ -3,6 +3,8 @@
 
 #include <xc.h>
 #include <pic18f4520.h>
+#include <stdio.h>
+
 #define _XTAL_FREQ 20000000
 
 // estados

@@ -4,7 +4,7 @@
 #define ENABLE              1
 #define DISABLE             0
 
-#define MAX_TASKS           4
+#define MAX_TASKS           6
 #define DEFAULT_SCH         ROUND_ROBIN_SCH
 #define QUANTUM_RR          5
 #define DYNAMIC_MEMORY      DISABLE
