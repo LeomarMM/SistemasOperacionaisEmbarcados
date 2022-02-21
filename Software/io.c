@@ -14,27 +14,34 @@ void hardware_init(void)
     TRISD = 0b11110000;       // seta portD como saída.
     TRISE = 0b00000000;
     
+    INTCON2bits.RBPU = 0; // Habilitando pull-up interno do PORTB
+    
+    adc_init();
+    usart_init();
     lcd_init();
 }
 
 void adc_init()
 {
-    ADCON1bits.VCFG = 0;
+    ADCON1bits.VCFG = 0x00;
     ADCON1bits.PCFG = 0b1101;
     ADCON2bits.ADFM = 1;
     ADCON2bits.ACQT = 1;
     ADCON2bits.ADCS = 2;
-    TRISAbits.RA0 = 1;
-    TRISAbits.RA1 = 1;
     ADCON0bits.ADON = 1;
 }
 
-int adc_read(int port)
+int adc_read(unsigned char port)
 {
     ADCON0bits.CHS = port;
     ADCON0bits.GODONE = 1;
     while(ADCON0bits.GODONE);
-    return ADRES;
+    
+    int temperature = ADRESH;
+    temperature <<= 8;
+    temperature += ADRESL;
+    
+    return temperature;
 }
 
 void lcd_port(char a)
@@ -206,4 +213,59 @@ void fire_alarm_warning_lights_invert(void)
 {
     PORTBbits.RB6 = ~PORTBbits.RB6;
     PORTBbits.RB7 = ~PORTBbits.RB7;
+}
+
+int read_fire_alarm_button(void)
+{
+    return PORTBbits.RB0;
+}
+
+int read_temperature_increment_button(void)
+{
+    return PORTBbits.RB1;
+}
+
+int read_temperature_decrement_button(void)
+{
+    return PORTBbits.RB2;
+}
+
+void enable_keypad_column(short column)
+{
+    PORTDbits.RD1 = (column == 1)? 0:1;
+    PORTDbits.RD2 = (column == 2)? 0:1;
+    PORTDbits.RD3 = (column == 3)? 0:1;
+}
+
+int read_keypad_row(void)
+{
+    if(!PORTDbits.RD4)
+        return 1;
+    if(!PORTDbits.RD5)
+        return 2;
+    if(!PORTDbits.RD6)
+        return 3;
+    if(!PORTDbits.RD7)
+        return 4;
+    return 0;
+}
+
+void usart_init()
+{
+    TXSTA = 0X24;
+    RCSTA = 0X90;
+    SPBRG = (20000000UL / (long)(16UL * 9600)) - 1;
+}
+
+void usart_send_data(char data)
+{
+    TXREG = data;
+    while(TXSTAbits.TRMT == 0);
+}
+
+char usart_read_data(void)
+{
+    //TXREG = data;
+    //while(TXSTAbits.TRMT == 0);
+    return 'a';
 }

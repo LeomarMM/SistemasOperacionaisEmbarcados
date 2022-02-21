@@ -8,9 +8,7 @@ int main()
     
     config_os();
 
-    create_task(2, pisca_led_1);
-    create_task(2, pisca_led_2);
-    create_task(2, adc_temp);
+    create_task(1, climate_control);
    
     start_os();
    

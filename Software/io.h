@@ -23,7 +23,7 @@ void hardware_init(void);
 
 // ADC functions
 void adc_init(void);
-int adc_read(int);
+int adc_read(unsigned char);
 // LCD functions
 void lcd_port(char);
 void lcd_cmd(char);
@@ -46,7 +46,17 @@ void elevator_stop(void);
 void fire_alarm_buzzer(short);
 void fire_alarm_warning_lights(short);
 void fire_alarm_warning_lights_invert(void);
-
+// Manual Controls
+int read_fire_alarm_button(void);
+int read_temperature_increment_button(void);
+int read_temperature_decrement_button(void);
+// Keypad
+void enable_keypad_column(short);
+int read_keypad_row(void); // retorna o n.a linha precionada ou 0 caso contrário
+// USART
+void usart_init(void);
+void usart_send_data(char);
+char usart_read_data(void);
 
 #endif	/* IO_H */
 
