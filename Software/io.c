@@ -36,13 +36,13 @@ int adc_read(unsigned char port)
     di();
     ADCON0bits.CHS = port;
     ADCON0bits.GODONE = 1;
-    ei();
+    
     while(ADCON0bits.GODONE);
     
     int temperature = ADRESH;
     temperature <<= 8;
     temperature += ADRESL;
-    
+    ei();
     return temperature;
 }
 

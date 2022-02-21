@@ -10,6 +10,7 @@ int main()
 
     create_task(1, climate_control);
     create_task(2, elevator_control);
+    create_task(2, elevator_move);
     start_os();
    
     while (1);
