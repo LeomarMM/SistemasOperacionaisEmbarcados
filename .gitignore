@@ -1,4 +1,4 @@
-Software/dist/*
-Software/build/*
+*/dist/*
+*/build/*
 Hardware/*
 !Hardware/DEC7562-Trabalho_01.pdsprj
