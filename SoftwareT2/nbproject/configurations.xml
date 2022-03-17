@@ -220,7 +220,7 @@
         <property key="mpreserve-all" value="false"/>
         <property key="oXC16glb-macros" value=""/>
         <property key="omit-pack-options" value="1"/>
-        <property key="output-file-format" value="coff"/>
+        <property key="output-file-format" value="elf"/>
         <property key="preserve-all" value="false"/>
         <property key="preserve-file" value=""/>
         <property key="relaxed-math" value="false"/>
