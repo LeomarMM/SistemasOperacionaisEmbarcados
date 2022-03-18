@@ -1,9 +1,8 @@
 #include "io.h"
 #include "FreeRTOS.h"
 #include "task.h"
-#define DELAY_MS ((double)configTICK_RATE_HZ/1000.0)
-#define DELAY_uS ((double)configTICK_RATE_HZ/1000000.0)
-
+extern const TickType_t delay_ms;
+extern const TickType_t delay_us;
 void adc_init()
 {
 }
@@ -46,7 +45,7 @@ void lcd_cmd(char a)
 	asm("BCLR LATD, #4");             // => RS = 0
 	lcd_port(a);
 	asm("BSET LATD, #5");             // => E = 1
-    vTaskDelay(4 * DELAY_MS);
+    vTaskDelay(4 * delay_ms);
     asm("BCLR LATD, #5");             // => E = 0
 }
 
@@ -89,11 +88,11 @@ void lcd_set_cursor(char a, char b)
 void lcd_init()
 {
     lcd_port(0x00);
-    vTaskDelay(20 * DELAY_MS);
+    vTaskDelay(20 * delay_ms);
     lcd_cmd(0x03);
-    vTaskDelay(5 * DELAY_MS);
+    vTaskDelay(5 * delay_ms);
     lcd_cmd(0x03);
-	vTaskDelay(16 * DELAY_MS);
+	vTaskDelay(16 * delay_ms);
     lcd_cmd(0x03);
     /////////////////////////////////////////////////////
     lcd_cmd(0x02);
@@ -114,11 +113,11 @@ void lcd_write_char(char a)
    asm("BSET LATD, #4");
    lcd_port(y>>4);             //Data transfer
    asm("BSET LATD, #5");
-   vTaskDelay(40 * DELAY_uS);
+   vTaskDelay(40 * delay_us);
    asm("BCLR LATD, #5");
    lcd_port(temp);
    asm("BSET LATD, #5");
-   vTaskDelay(40 * DELAY_uS);
+   vTaskDelay(40 * delay_us);
    asm("BCLR LATD, #5");
 }
 
@@ -188,10 +187,8 @@ void fire_alarm_warning_lights(short state)
 
 void fire_alarm_warning_lights_invert(void)
 {
-    
     PORTFbits.RF8 = ~PORTFbits.RF8;
     PORTFbits.RF12 = ~PORTFbits.RF12;
-    
 }
 
 int read_fire_alarm_button(void)
@@ -207,28 +204,6 @@ int read_temperature_increment_button(void)
 int read_temperature_decrement_button(void)
 {
     return PORTFbits.RF6;
-}
-
-void enable_keypad_column(short column)
-{   
-    if(column == 1)
-    {
-        asm("BSET LATD, #8\n"
-            "BCLR LATD, #7\n"
-            "BCLR LATD, #6\n");
-    }
-    else if(column == 2)
-    {
-        asm("BCLR LATD, #8\n"
-            "BSET LATD, #7\n"
-            "BCLR LATD, #6\n");
-    }
-    else
-    {
-        asm("BCLR LATD, #8\n"
-            "BCLR LATD, #7\n"
-            "BSET LATD, #6\n");
-    }  
 }
 
 int read_keypad_row(void)
