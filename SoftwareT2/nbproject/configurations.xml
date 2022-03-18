@@ -24,6 +24,7 @@
       <itemPath>task.h</itemPath>
       <itemPath>timers.h</itemPath>
       <itemPath>FreeRTOSConfig.h</itemPath>
+      <itemPath>io.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -43,6 +44,8 @@
       <itemPath>portasm_PIC24.S</itemPath>
       <itemPath>main.c</itemPath>
       <itemPath>heap_4.c</itemPath>
+      <itemPath>io.c</itemPath>
+      <itemPath>io_asm.s</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -61,7 +64,7 @@
         <targetDevice>PIC24FJ128GA010</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>noID</platformTool>
+        <platformTool>Simulator</platformTool>
         <languageToolchain>XC16</languageToolchain>
         <languageToolchainVersion>2.00</languageToolchainVersion>
         <platform>3</platform>
@@ -226,6 +229,16 @@
         <property key="relaxed-math" value="false"/>
         <property key="save-temps" value="false"/>
       </C30Global>
+      <Simulator>
+        <property key="W0003_CORE_SW_RESET" value="report"/>
+        <property key="W0016_CORE_STACK_ERROR" value="report"/>
+        <property key="W0018_CORE_UNIMPLEMENTED_RAMACCESS" value="report"/>
+      </Simulator>
+      <Tool>
+        <property key="W0003_CORE_SW_RESET" value="report"/>
+        <property key="W0016_CORE_STACK_ERROR" value="report"/>
+        <property key="W0018_CORE_UNIMPLEMENTED_RAMACCESS" value="report"/>
+      </Tool>
     </conf>
   </confs>
 </configurationDescriptor>

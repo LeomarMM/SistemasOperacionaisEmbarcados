@@ -7,15 +7,20 @@
 #include "task.h"
 #include "queue.h"
 #include "croutine.h"
-static void t_ex(void);
+#include "io.h"
+#pragma config POSCMOD = HS
+#pragma config FNOSC = PRI
+static void system_boot(void*);
 int main(void)
 {
-	xTaskCreate(t_ex, "Check", 64, NULL, 2, NULL);
+	xTaskCreate(system_boot, "Check", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
 	vTaskStartScheduler();
+    while(1);
 	return 0;
 }
-static void t_ex()
+static void system_boot(void* ptr)
 {
+    hardware_init();
+    lcd_write_string("Iniciando...");
     while(1);
-    
 }
