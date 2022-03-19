@@ -7,6 +7,7 @@
 #include "task.h"
 #pragma config POSCMOD = HS
 #pragma config FNOSC = PRI
+#pragma config FWDTEN = OFF
 void system_boot(void* ptr);
 int main(void)
 {
