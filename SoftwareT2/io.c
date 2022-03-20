@@ -3,43 +3,6 @@
 #include "task.h"
 extern const TickType_t delay_ms;
 extern const TickType_t delay_us;
-void adc_init()
-{
-}
-int adc_read(unsigned char port)
-{   
-    return 0;
-}
-void lcd_port(char a)
-{
-	if(a & 1)
-    {
-        asm("BSET LATD, #0");
-    }
-	else
-		asm("BCLR LATD, #0");
-
-	if(a & 2)
-    {
-        asm("BSET LATD, #1");
-    }
-	else
-		asm("BCLR LATD, #1");
-
-	if(a & 4)
-    {
-        asm("BSET LATD, #2");
-    }
-	else
-		asm("BCLR LATD, #2");
-
-	if(a & 8)
-    {
-        asm("BSET LATD, #3");
-    }
-	else
-		asm("BCLR LATD, #3");
-}
 void lcd_cmd(char a)
 {
 	asm("BCLR LATD, #4");             // => RS = 0
@@ -94,7 +57,6 @@ void lcd_init()
     lcd_cmd(0x03);
 	vTaskDelay(16 * delay_ms);
     lcd_cmd(0x03);
-    /////////////////////////////////////////////////////
     lcd_cmd(0x02);
     lcd_cmd(0x02);
     lcd_cmd(0x08);
@@ -106,12 +68,12 @@ void lcd_init()
 
 void lcd_write_char(char a)
 {
-    
    char temp,y;
    temp = a&0x0F;
    y = a&0xF0;
    asm("BSET LATD, #4");
-   lcd_port(y>>4);             //Data transfer
+   lcd_port(y>>4);
+   vTaskDelay(40 * delay_us);
    asm("BSET LATD, #5");
    vTaskDelay(40 * delay_us);
    asm("BCLR LATD, #5");

@@ -18,9 +18,9 @@ int temperature = 25;
 void system_boot(void* ptr)
 {
     hardware_init();
-    xTaskCreate(temperature_control, "tempctr", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
-    xTaskCreate(climate_control, "climctr", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
-    xTaskCreate(fire_alarm_control, "alarmctr", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
+    xTaskCreate(temperature_control, "temperature_control", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
+    xTaskCreate(climate_control, "climate_control", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
+    xTaskCreate(fire_alarm_control, "fire_alarm_control", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
     vTaskDelete(0);
 }
 void fire_alarm_control(void* ptr)
@@ -56,21 +56,15 @@ void temperature_control(void* ptr)
 }
 void climate_control(void* ptr)
 {
-    int t1, t2, t;    
+    int t, tref;    
     while(1) {
-        char buffer[50];
-        t1 = adc_read(1);
-        t2 = adc_read(0);
-        t = ((double)(t1-t2)*(500.0/1024.0));
-        lcd_set_cursor(2, 1);
-        sprintf(buffer, "Temp. Ambt.: %d C      ", (t));
-        lcd_write_string(buffer);
-        int tref = temperature;
-        if(t > (tref)) {
+        t = ((double)(adc_read())*(500.0/1024.0));
+        tref = temperature;
+        if(t > tref) {
             heating_system(OFF);
             cooling_system(ON);
             stable_temperature(OFF);
-        } else if (t < (tref)) {
+        } else if (t < tref) {
             heating_system(ON);
             cooling_system(OFF);
             stable_temperature(OFF);

@@ -7,14 +7,13 @@
 // estados
 #define ON 1
 #define OFF 0
-
 void hardware_init(void);
 
 // PWM functions
 
 // ADC functions
 void adc_init(void);
-int adc_read(unsigned char);
+int16_t adc_read();
 // LCD functions
 void lcd_port(char);
 void lcd_cmd(char);
