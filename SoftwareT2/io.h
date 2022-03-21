@@ -21,7 +21,7 @@ void lcd_clear(void);
 void lcd_set_cursor(char, char);
 void lcd_init(void);
 void lcd_write_char(char);
-void lcd_write_string(char *);
+void lcd_write_string(const char *);
 void lcd_shift_right(void);
 void lcd_shift_left(void);
 // Sistema de climatização

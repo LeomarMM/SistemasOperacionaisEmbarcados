@@ -83,7 +83,7 @@ void lcd_write_char(char a)
    asm("BCLR LATD, #5");
 }
 
-void lcd_write_string(char *a)
+void lcd_write_string(const char *a)
 {
 	int i;
 	for(i=0;a[i]!='\0';i++)
@@ -100,57 +100,6 @@ void lcd_shift_left(void)
 {
 	lcd_cmd(0x01);
 	lcd_cmd(0x08);
-}
-
-void heating_system(short state)
-{
-    if(state)
-    {
-        asm("BCLR PORTD, #13");
-    }
-    else asm("BSET PORTD, #13");
-}
-
-void cooling_system(short state)
-{
-    if(state)
-    {
-        asm("BCLR PORTD, #15");
-    }
-    else asm("BSET PORTD, #15");
-}
-
-void stable_temperature(short state)
-{
-    if(state)
-    {
-        asm("BCLR PORTD, #14");
-    }
-    else asm("BSET PORTD, #14");
-}
-void fire_alarm_buzzer(short state)
-{
-    if(state)
-    {
-        asm("BSET PORTF, #7");
-    }
-    else asm("BCLR PORTF, #7");
-}
-
-void fire_alarm_warning_lights(short state)
-{
-    if(state)
-    {
-        asm("BCLR PORTF, #8");
-    }
-    else asm("BSET PORTF, #8");
-    asm("BSET PORTF, #12");
-}
-
-void fire_alarm_warning_lights_invert(void)
-{
-    PORTFbits.RF8 = ~PORTFbits.RF8;
-    PORTFbits.RF12 = ~PORTFbits.RF12;
 }
 
 int read_fire_alarm_button(void)
