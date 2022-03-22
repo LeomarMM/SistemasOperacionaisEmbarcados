@@ -25,6 +25,7 @@
       <itemPath>timers.h</itemPath>
       <itemPath>FreeRTOSConfig.h</itemPath>
       <itemPath>io.h</itemPath>
+      <itemPath>user_tasks.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"

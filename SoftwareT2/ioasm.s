@@ -1,6 +1,6 @@
 .global _hardware_init, _adc_init, _adc_read
 .global _lcd_port, _enable_keypad_column, _elevator_down
-.global _elevator_up, elevator_stop, _heating_system
+.global _elevator_up, _elevator_stop, _heating_system
 .global _cooling_system, _stable_temperature, _fire_alarm_buzzer
 .global _fire_alarm_warning_lights, _fire_alarm_warning_lights_invert
 .global _read_fire_alarm_button, _read_temperature_increment_button

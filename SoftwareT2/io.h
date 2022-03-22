@@ -25,24 +25,24 @@ void lcd_write_string(const char *);
 void lcd_shift_right(void);
 void lcd_shift_left(void);
 // Sistema de climatização
-void heating_system(short);
-void cooling_system(short);
-void stable_temperature(short);
+void heating_system(uint8_t);
+void cooling_system(uint8_t);
+void stable_temperature(uint8_t);
 // Elevator Control
 void elevator_down(void);
 void elevator_up(void);
 void elevator_stop(void);
 // Fire Alarm Control
-void fire_alarm_buzzer(short);
-void fire_alarm_warning_lights(short);
+void fire_alarm_buzzer(uint8_t);
+void fire_alarm_warning_lights(uint8_t);
 void fire_alarm_warning_lights_invert(void);
 // Manual Controls
-int read_fire_alarm_button(void);
-int read_temperature_increment_button(void);
-int read_temperature_decrement_button(void);
+uint8_t read_fire_alarm_button(void);
+uint8_t read_temperature_increment_button(void);
+uint8_t read_temperature_decrement_button(void);
 // Keypad
 void enable_keypad_column(short);
-int read_keypad_row(void); // retorna o n.a linha precionada ou 0 caso contrário
+uint8_t read_keypad_row(void); // retorna o n.a linha precionada ou 0 caso contrário
 // USART
 void usart_init(void);
 void usart_send_data(char);
