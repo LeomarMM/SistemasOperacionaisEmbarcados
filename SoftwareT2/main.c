@@ -13,7 +13,7 @@ void system_boot(void* ptr);
 int main(void)
 {
     hardware_init();
-	xTaskCreate(system_boot, "system_boot", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
+	xTaskCreate(system_boot, "system_boot", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES, NULL);
 	vTaskStartScheduler();
 	return 0;
 }
