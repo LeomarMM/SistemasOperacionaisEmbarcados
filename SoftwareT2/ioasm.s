@@ -3,6 +3,8 @@
 .global _elevator_up, elevator_stop, _heating_system
 .global _cooling_system, _stable_temperature, _fire_alarm_buzzer
 .global _fire_alarm_warning_lights, _fire_alarm_warning_lights_invert
+.global _read_fire_alarm_button, _read_temperature_increment_button
+.global _read_temperature_decrement_button, _read_keypad_row
 .extern _usart_init
 .extern _lcd_init
 
@@ -74,19 +76,19 @@ _enable_keypad_column:
     BRA Z, second_column
     GOTO last_column
     first_column:
-        BSET LATD, #8
-        BCLR LATD, #7
-        BCLR LATD, #6
-	RETURN
-    second_column:	
         BCLR LATD, #8
         BSET LATD, #7
-        BCLR LATD, #6
+        BSET LATD, #6
+	RETURN
+    second_column:	
+        BSET LATD, #8
+        BCLR LATD, #7
+        BSET LATD, #6
 	RETURN
     last_column:
-	BCLR LATD, #8
-	BCLR LATD, #7
-	BSET LATD, #6
+	BSET LATD, #8
+	BSET LATD, #7
+	BCLR LATD, #6
 	RETURN
     
 _elevator_down:
@@ -180,6 +182,52 @@ _fire_alarm_warning_lights_invert:
 	RETURN
     lightb_off:
 	BSET LATF, #12
+	RETURN
+	
+_read_fire_alarm_button:
+
+    MOV PORTF, W0
+    LSR W0, #4, W0
+    AND #1, W0
+    RETURN
+
+_read_temperature_increment_button:
+
+    MOV PORTF, W0
+    LSR W0, #5, W0
+    AND #1, W0
+    RETURN
+
+_read_temperature_decrement_button:
+
+    MOV PORTF, W0
+    LSR W0, #6, W0
+    AND #1, W0
+    RETURN
+
+_read_keypad_row:
+    
+    BTSS PORTD, #9
+    GOTO RET_1
+    BTSS PORTD, #10
+    GOTO RET_2
+    BTSS PORTD, #11
+    GOTO RET_3
+    BTSS PORTD, #12
+    GOTO RET_4
+    MOV #0, W0
+    RETURN
+    RET_1:
+	MOV #1, W0
+	RETURN
+    RET_2:
+	MOV #2, W0
+	RETURN
+    RET_3:
+	MOV #3, W0
+	RETURN
+    RET_4:
+	MOV #4, W0
 	RETURN
 
 .end

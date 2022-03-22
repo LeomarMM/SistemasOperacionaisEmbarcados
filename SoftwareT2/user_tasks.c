@@ -15,6 +15,7 @@ void climate_control(void*);
 void lcd_output(void*);
 const TickType_t delay_ms = ((double)configTICK_RATE_HZ/1000.0);
 const TickType_t delay_us = ((double)configTICK_RATE_HZ/1000000.0);
+const double fat_corr = 500.0/1023.0;
 const char* temp_ctrl_str = "Temp. Cont.: --- \xDF""C";
 const char* temp_amb_str = "Temp. Ambt.: --- \xDF""C";
 const char* piso_slc_str = "Piso. Selec: ---";
@@ -73,7 +74,7 @@ void climate_control(void* ptr)
 {
     int temp_amb_int, temp_ctrl_int;    
     while(1) {
-        temp_amb_int = ((double)(adc_read())*(500.0/1024.0));
+        temp_amb_int = adc_read()*fat_corr;
         temp_amb  = temp_amb_int;
         temp_ctrl_int = temp_ctrl;
         if(temp_amb_int > temp_ctrl_int) {
@@ -94,8 +95,8 @@ void climate_control(void* ptr)
 void lcd_output(void* ptr)
 {
     int temp_ctrl_int, temp_amb_int;
+    char numbuf[4];
     while(1) {
-        char numbuf[4];
         
         temp_ctrl_int = temp_ctrl;
         temp_amb_int = temp_amb;

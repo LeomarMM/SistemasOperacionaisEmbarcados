@@ -102,34 +102,6 @@ void lcd_shift_left(void)
 	lcd_cmd(0x08);
 }
 
-int read_fire_alarm_button(void)
-{
-    return PORTFbits.RF4;
-}
-
-int read_temperature_increment_button(void)
-{
-    return PORTFbits.RF5;
-}
-
-int read_temperature_decrement_button(void)
-{
-    return PORTFbits.RF6;
-}
-
-int read_keypad_row(void)
-{
-    if(!PORTDbits.RD9)
-        return 1;
-    if(!PORTDbits.RD10)
-        return 2;
-    if(!PORTDbits.RD11)
-        return 3;
-    if(!PORTDbits.RD12)
-        return 4;
-    return 0;
-}
-
 void usart_init()
 {
 }

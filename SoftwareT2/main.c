@@ -15,6 +15,5 @@ int main(void)
     hardware_init();
 	xTaskCreate(system_boot, "system_boot", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
 	vTaskStartScheduler();
-    while(1);
 	return 0;
 }
