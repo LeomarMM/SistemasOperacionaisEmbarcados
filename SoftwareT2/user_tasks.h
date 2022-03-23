@@ -8,6 +8,7 @@ void climate_control(void*);
 void lcd_output(void*);
 void elevator_control(void*);
 void elevator_move(void*);
+void uart_rx(void* ptr);
 
 #endif	/* USER_TASKS_H */
 

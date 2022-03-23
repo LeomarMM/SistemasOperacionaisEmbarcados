@@ -1,4 +1,4 @@
-.global _hardware_init, _adc_init, _adc_read
+.global _hardware_init, _adc_init, _uart_init, _adc_read
 .global _lcd_port, _enable_keypad_column, _elevator_down
 .global _elevator_up, _elevator_stop, _heating_system
 .global _cooling_system, _stable_temperature, _fire_alarm_buzzer
@@ -23,7 +23,7 @@ _hardware_init:
     MOV W4, LATD
     MOV W5, LATF
     CALL _adc_init
-    CALL _usart_init
+    CALL _uart_init
     RETURN
 
 _adc_init:
@@ -42,6 +42,16 @@ _adc_init:
     BSET AD1CON1, #15
     RETURN
 
+_uart_init:
+    ;	   FEDCBA9876543210
+    MOV #0b1000000000001000, W0 ;U1MODE
+    MOV #0b0000000000000000, W1 ;U1STA
+    MOV #416, W2 ;U1BRG
+    MOV W0, U1MODE
+    MOV W1, U1STA
+    MOV W2, U1BRG
+    RETURN
+    
 _adc_read:
     BSET AD1CON1, #2
     AD1IF_loop:

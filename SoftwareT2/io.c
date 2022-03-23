@@ -102,15 +102,12 @@ void lcd_shift_left(void)
 	lcd_cmd(0x08);
 }
 
-void usart_init()
+void uart_send_data(char data)
 {
 }
 
-void usart_send_data(char data)
-{    
-}
-
-char usart_read_data(void)
+char uart_read_data(void)
 {
-    return 'a';
+    while(!U1STAbits.URXDA);
+    return U1RXREG;
 }

@@ -57,6 +57,7 @@ void system_boot(void* ptr)
         xTaskCreate(lcd_output, "lcd_output", configMINIMAL_STACK_SIZE, NULL, 3, NULL);
         xTaskCreate(elevator_control, "elevator_control", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
         xTaskCreate(elevator_move, "elevator_move", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
+        xTaskCreate(uart_rx, "uart_rx", configMINIMAL_STACK_SIZE, NULL, 4, NULL);
     }
     vTaskDelete(0);
 }
@@ -220,5 +221,12 @@ void elevator_move(void* ptr)
                 elevator_stop();
             }
         }
+    }
+}
+void uart_rx(void* ptr)
+{
+    while(1)
+    {
+        uart_read_data();
     }
 }
