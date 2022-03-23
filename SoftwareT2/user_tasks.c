@@ -9,10 +9,6 @@ const TickType_t delay_ms = ((double)configTICK_RATE_HZ/1000.0);
 const TickType_t delay_us = ((double)configTICK_RATE_HZ/1000000.0);
 const uint8_t btab[4][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 0, 11}};
 const double fat_corr = 500.0/1023.0;
-const char* temp_ctrl_str = "Temp. Cont.: --- \xDF""C";
-const char* temp_amb_str = "Temp. Ambt.: --- \xDF""C";
-const char* piso_slc_str = "Piso. Selec: ---";
-const char* piso_atl_str = "Piso. Atual: ---";
 
 SemaphoreHandle_t cfh;
 SemaphoreHandle_t nfh;
@@ -27,26 +23,41 @@ int16_t temp_amb = 0;
 void system_boot(void* ptr)
 {
     lcd_init();
-    lcd_set_cursor(1, 1);
-    lcd_write_string(temp_ctrl_str);
-    lcd_set_cursor(2, 1);
-    lcd_write_string(temp_amb_str);
-    lcd_set_cursor(3, 1);
-    lcd_write_string(piso_slc_str);
-    lcd_set_cursor(4, 1);
-    lcd_write_string(piso_atl_str);
     
     cfh = xSemaphoreCreateMutex();
     nfh = xSemaphoreCreateMutex();
     tch = xSemaphoreCreateMutex();
     tah = xSemaphoreCreateMutex();
     
-    xTaskCreate(temperature_control, "temperature_control", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
-    xTaskCreate(climate_control, "climate_control", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
-    xTaskCreate(fire_alarm_control, "fire_alarm_control", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES, NULL);
-    xTaskCreate(lcd_output, "lcd_output", configMINIMAL_STACK_SIZE, NULL, 3, NULL);
-    xTaskCreate(elevator_control, "elevator_control", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
-    xTaskCreate(elevator_move, "elevator_move", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
+    if(cfh == NULL || nfh == NULL || tch == NULL || tah == NULL)
+    {
+        lcd_set_cursor(1, 1);
+        lcd_write_string("======= ERRO =======");
+        lcd_set_cursor(2, 1);
+        lcd_write_string("  Nao foi possivel");
+        lcd_set_cursor(3, 1);
+        lcd_write_string(" criar os semaforos");
+        lcd_set_cursor(4, 1);
+        lcd_write_string("====================");
+    }
+    else
+    {
+        lcd_set_cursor(1, 1);
+        lcd_write_string("Temp. Cont.: --- \xDF""C");
+        lcd_set_cursor(2, 1);
+        lcd_write_string("Temp. Ambt.: --- \xDF""C");
+        lcd_set_cursor(3, 1);
+        lcd_write_string("Piso. Selec: ---");
+        lcd_set_cursor(4, 1);
+        lcd_write_string("Piso. Atual: ---");
+
+        xTaskCreate(temperature_control, "temperature_control", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
+        xTaskCreate(climate_control, "climate_control", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
+        xTaskCreate(fire_alarm_control, "fire_alarm_control", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES, NULL);
+        xTaskCreate(lcd_output, "lcd_output", configMINIMAL_STACK_SIZE, NULL, 3, NULL);
+        xTaskCreate(elevator_control, "elevator_control", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
+        xTaskCreate(elevator_move, "elevator_move", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
+    }
     vTaskDelete(0);
 }
 void fire_alarm_control(void* ptr)
@@ -114,7 +125,8 @@ void lcd_output(void* ptr)
 {
     int16_t temp_ctrl_int = 25, temp_amb_int = 0;
     uint8_t current_floor_int = 1, next_floor_int = 1;
-    char numbuf[4];
+    char* numbuf;
+    numbuf = pvPortMalloc(4*sizeof(char));
     while(1) {
         
         if(xSemaphoreTake(tch, 5))
