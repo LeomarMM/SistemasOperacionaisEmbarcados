@@ -112,27 +112,31 @@ void climate_control(void* ptr)
 }
 void lcd_output(void* ptr)
 {
-    int16_t temp_ctrl_int, temp_amb_int;
-    uint8_t current_floor_int, next_floor_int;
+    int16_t temp_ctrl_int = 25, temp_amb_int = 0;
+    uint8_t current_floor_int = 1, next_floor_int = 1;
     char numbuf[4];
     while(1) {
         
-        xSemaphoreTake(tch, portMAX_DELAY);
-        temp_ctrl_int = temp_ctrl;
-        xSemaphoreGive(tch);
-        
-        xSemaphoreTake(tah, portMAX_DELAY);
-        temp_amb_int = temp_amb;
-        xSemaphoreGive(tah);
-        
-        xSemaphoreTake(cfh, portMAX_DELAY);
-        current_floor_int = current_floor;
-        xSemaphoreGive(cfh);
-        
-        xSemaphoreTake(nfh, portMAX_DELAY);
-        next_floor_int = next_floor;
-        xSemaphoreGive(nfh);
-        
+        if(xSemaphoreTake(tch, 5))
+        {
+            temp_ctrl_int = temp_ctrl;
+            xSemaphoreGive(tch);
+        }
+        if(xSemaphoreTake(tah, 5))
+        {
+            temp_amb_int = temp_amb;
+            xSemaphoreGive(tah);
+        }
+        if(xSemaphoreTake(cfh, 5))
+        {
+            current_floor_int = current_floor;
+            xSemaphoreGive(cfh);
+        }
+        if(xSemaphoreTake(nfh, 5))
+        {
+            next_floor_int = next_floor;
+            xSemaphoreGive(nfh);
+        }
         sprintf(numbuf, "%3d", temp_ctrl_int);
         lcd_set_cursor(1, 14);
         lcd_write_string(numbuf);
