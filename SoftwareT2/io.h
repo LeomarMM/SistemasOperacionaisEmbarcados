@@ -43,10 +43,10 @@ uint8_t read_temperature_decrement_button(void);
 // Keypad
 void enable_keypad_column(short);
 uint8_t read_keypad_row(void); // retorna o n.a linha precionada ou 0 caso contrário
-// USART
+// UART
 void uart_init(void);
-void uart_send_data(char);
-char uart_read_data(void);
+void uart_send(char);
+char uart_read(void);
 
 #endif	/* IO_H */
 

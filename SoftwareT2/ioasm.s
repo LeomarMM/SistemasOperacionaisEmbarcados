@@ -5,9 +5,8 @@
 .global _fire_alarm_warning_lights, _fire_alarm_warning_lights_invert
 .global _read_fire_alarm_button, _read_temperature_increment_button
 .global _read_temperature_decrement_button, _read_keypad_row
-.extern _usart_init
-.extern _lcd_init
-
+.global _uart_read, _uart_send
+    
 _hardware_init:
     ;	   FEDCBA9876543210
     MOV #0b0000000000000011, W0 ;TRISB
@@ -45,7 +44,7 @@ _adc_init:
 _uart_init:
     ;	   FEDCBA9876543210
     MOV #0b1000000000001000, W0 ;U1MODE
-    MOV #0b0000000000000000, W1 ;U1STA
+    MOV #0b0000010000000000, W1 ;U1STA
     MOV #416, W2 ;U1BRG
     MOV W0, U1MODE
     MOV W1, U1STA
@@ -239,5 +238,19 @@ _read_keypad_row:
     RET_4:
 	MOV #4, W0
 	RETURN
+
+_uart_send:
+    
+    BTSC U1STA, #9
+    GOTO _uart_send
+    MOV W0, U1TXREG
+    RETURN
+
+_uart_read:
+    
+    BTSS U1STA, #0
+    GOTO _uart_read
+    MOV U1RXREG, W0
+    RETURN
 
 .end

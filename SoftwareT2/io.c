@@ -101,13 +101,3 @@ void lcd_shift_left(void)
 	lcd_cmd(0x01);
 	lcd_cmd(0x08);
 }
-
-void uart_send_data(char data)
-{
-}
-
-char uart_read_data(void)
-{
-    while(!U1STAbits.URXDA);
-    return U1RXREG;
-}
