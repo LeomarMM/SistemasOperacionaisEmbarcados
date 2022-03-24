@@ -54,7 +54,7 @@ void system_boot(void* ptr)
         xTaskCreate(temperature_control, "temperature_control", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
         xTaskCreate(climate_control, "climate_control", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
         xTaskCreate(fire_alarm_control, "fire_alarm_control", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES, NULL);
-        xTaskCreate(lcd_output, "lcd_output", 255, NULL, 3, NULL);
+        xTaskCreate(lcd_output, "lcd_output", 255, NULL, 4, NULL);
         xTaskCreate(elevator_control, "elevator_control", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
         xTaskCreate(elevator_move, "elevator_move", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
         xTaskCreate(uart_control, "uart_control", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
@@ -226,8 +226,24 @@ void elevator_move(void* ptr)
 }
 void uart_control(void* ptr)
 {
+    const char* init_msg = "Sistema de Sprinklers\r\n";
+    const char* inva_cmd = "Comando Inválido\r\n";
+    char sector;
+    uint8_t state;
+    char buffer[22];
+    uart_print(init_msg);
     while(1)
     {
-        uart_send(uart_read());
+        sector = uart_read();
+        state = uart_read();
+        state = state-'0';
+        if(state != 0 && state != 1)
+            uart_print(inva_cmd);
+        else 
+        {
+            
+            sprintf(buffer, "Setor %c - %s\r\n", sector, (state ? "Ativar":"Desativar"));
+            uart_print(buffer);
+        }
     }
 }

@@ -47,6 +47,6 @@ uint8_t read_keypad_row(void); // retorna o n.a linha precionada ou 0 caso contr
 void uart_init(void);
 void uart_send(char);
 char uart_read(void);
-
+void uart_print(const char*);
 #endif	/* IO_H */
 

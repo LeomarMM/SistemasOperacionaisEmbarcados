@@ -101,3 +101,8 @@ void lcd_shift_left(void)
 	lcd_cmd(0x01);
 	lcd_cmd(0x08);
 }
+
+void uart_print(const char* string)
+{
+    for(uint16_t i=0; string[i] != 0; i++) uart_send(string[i]);
+}
